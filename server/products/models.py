@@ -4,7 +4,7 @@ import uuid
 
 class Category(models.Model):
     name = models.CharField(max_length=255, unique=True)
-    slug = models.SlugField(unique=True, help_text="A URL-friendly version of the category name.")
+    slug = models.SlugField(unique=True, help_text="A URL name.")
     parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children')
 
     class Meta:
@@ -45,8 +45,8 @@ class AttributeValue(models.Model):
 class Product(models.Model):
     category = models.ForeignKey(Category, related_name='products', on_delete=models.SET_NULL, null=True)
     name = models.CharField(max_length=255)
-    slug = models.SlugField(unique=True, help_text="A unique URL-friendly identifier for the product.")
-    description = models.TextField(help_text="A compelling description of the product.")
+    slug = models.SlugField(unique=True, help_text=" identifier for the product.")
+    description = models.TextField(help_text="description of the product.")
     tags = models.ManyToManyField(Tag, blank=True)
     
     is_active = models.BooleanField(default=True)
@@ -74,8 +74,8 @@ class ProductVariant(models.Model):
 
 class ProductImage(models.Model):
     product = models.ForeignKey(Product, related_name='images', on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='product_images/', help_text="Upload a product image.")
-    alt_text = models.CharField(max_length=255, blank=True, help_text="A short description of the image for accessibility.")
+    image = models.ImageField(upload_to='image_url', help_text="product image.")
+    alt_text = models.CharField(max_length=255, blank=True, help_text="image.")
 
     def __str__(self):
         return f"Image for {self.product.name}"
