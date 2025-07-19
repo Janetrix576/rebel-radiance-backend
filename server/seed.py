@@ -1,7 +1,6 @@
 import os
 import django
 import random
-
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'beautyshop.settings')
 django.setup()
 
@@ -12,97 +11,102 @@ def clear_data():
     Category.objects.all().delete()
     Tag.objects.all().delete()
     Attribute.objects.all().delete()
-    Product.objects.all().delete()
-    print("Old data cleared.")
+    Product.objects.all().delete() 
+    print("Old data has been cleared.")
 
 def seed_data():
-    print("Creating new data...")
+    print("Seeding new data...")
 
-    size_attr = Attribute.objects.create(name="Size")
-    attr_s = AttributeValue.objects.create(attribute=size_attr, value="Small")
-    attr_m = AttributeValue.objects.create(attribute=size_attr, value="Medium")
-    attr_l = AttributeValue.objects.create(attribute=size_attr, value="Large")
+    print("Creating Tags...")
+    tag_new, _ = Tag.objects.get_or_create(name="New Arrival")
+    tag_unisex, _ = Tag.objects.get_or_create(name="Unisex")
+    tag_men, _ = Tag.objects.get_or_create(name="For Men")
+    tag_women, _ = Tag.objects.get_or_create(name="For Women")
+    tag_bestseller, _ = Tag.objects.get_or_create(name="Bestseller")
+    tag_eco, _ = Tag.objects.get_or_create(name="Eco-Friendly")
 
-    shoe_size_attr = Attribute.objects.create(name="Shoe Size")
-    attr_41 = AttributeValue.objects.create(attribute=shoe_size_attr, value="41")
-    attr_42 = AttributeValue.objects.create(attribute=shoe_size_attr, value="42")
-    attr_43 = AttributeValue.objects.create(attribute=shoe_size_attr, value="43")
-    
-    volume_attr = Attribute.objects.create(name="Volume")
-    attr_50ml = AttributeValue.objects.create(attribute=volume_attr, value="50ml")
-    attr_100ml = AttributeValue.objects.create(attribute=volume_attr, value="100ml")
+    print("Creating Attributes...")
+    attr_size, _ = Attribute.objects.get_or_create(name="Size")
+    val_s, _ = AttributeValue.objects.get_or_create(attribute=attr_size, value="S")
+    val_m, _ = AttributeValue.objects.get_or_create(attribute=attr_size, value="M")
+    val_l, _ = AttributeValue.objects.get_or_create(attribute=attr_size, value="L")
 
-    clothing_cat = Category.objects.create(name="Clothing", slug="clothing")
-    footwear_cat = Category.objects.create(name="Footwear", slug="footwear")
-    perfume_cat = Category.objects.create(name="Perfumes", slug="perfumes")
-    skincare_cat = Category.objects.create(name="Skin Care", slug="skin-care")
-    haircare_cat = Category.objects.create(name="Hair Products", slug="hair-products")
+    attr_shoe_size, _ = Attribute.objects.get_or_create(name="Shoe Size (EU)")
+    val_ss_38, _ = AttributeValue.objects.get_or_create(attribute=attr_shoe_size, value="38")
+    val_ss_39, _ = AttributeValue.objects.get_or_create(attribute=attr_shoe_size, value="39")
+    val_ss_41, _ = AttributeValue.objects.get_or_create(attribute=attr_shoe_size, value="41")
+    val_ss_42, _ = AttributeValue.objects.get_or_create(attribute=attr_shoe_size, value="42")
 
-    new_arrival_tag = Tag.objects.create(name="New Arrival")
-    unisex_tag = Tag.objects.create(name="Unisex")
-    mens_tag = Tag.objects.create(name="For Men")
-    womens_tag = Tag.objects.create(name="For Women")
+    attr_volume, _ = Attribute.objects.get_or_create(name="Volume")
+    val_v_50, _ = AttributeValue.objects.get_or_create(attribute=attr_volume, value="50ml")
+    val_v_100, _ = AttributeValue.objects.get_or_create(attribute=attr_volume, value="100ml")
+    val_v_250, _ = AttributeValue.objects.get_or_create(attribute=attr_volume, value="250ml")
 
-    hoodie = Product.objects.create(category=clothing_cat, name="Mkurugenzi Classic Hoodie", slug="mkurugenzi-classic-hoodie", description="The iconic Mkurugenzi hoodie. A unisex staple.")
-    hoodie.tags.add(unisex_tag, new_arrival_tag)
-    ProductImage.objects.create(product=hoodie, image='product_images/hoodie_front.jpg', alt_text="Front view of the Mkurugenzi Hoodie")
-    ProductImage.objects.create(product=hoodie, image='product_images/hoodie_detail.jpg', alt_text="Detail shot of the Mkurugenzi Hoodie fabric")
-    
-    hoodie_s = ProductVariant.objects.create(product=hoodie, price=2500.00, stock_quantity=20)
-    hoodie_s.attributes.add(attr_s)
-    hoodie_m = ProductVariant.objects.create(product=hoodie, price=2500.00, stock_quantity=30)
-    hoodie_m.attributes.add(attr_m)
-    hoodie_l = ProductVariant.objects.create(product=hoodie, price=2500.00, stock_quantity=15)
-    hoodie_l.attributes.add(attr_l)
-    print(f"Created Product: {hoodie.name}")
+    print("Creating Categories...")
+    cat_clothing, _ = Category.objects.get_or_create(name="Clothing", defaults={'slug': 'clothing'})
+    cat_footwear, _ = Category.objects.get_or_create(name="Footwear", defaults={'slug': 'footwear'})
+    cat_beauty, _ = Category.objects.get_or_create(name="Beauty Products", defaults={'slug': 'beauty'})
+    cat_men_cloth, _ = Category.objects.get_or_create(name="Men's Clothing", defaults={'slug': 'men-clothing', 'parent': cat_clothing})
+    cat_women_cloth, _ = Category.objects.get_or_create(name="Women's Clothing", defaults={'slug': 'women-clothing', 'parent': cat_clothing})
+    cat_men_shoes, _ = Category.objects.get_or_create(name="Men's Shoes", defaults={'slug': 'men-shoes', 'parent': cat_footwear})
+    cat_women_shoes, _ = Category.objects.get_or_create(name="Women's Shoes", defaults={'slug': 'women-shoes', 'parent': cat_footwear})
+    cat_skincare, _ = Category.objects.get_or_create(name="Skincare", defaults={'slug': 'skincare', 'parent': cat_beauty})
+    cat_haircare, _ = Category.objects.get_or_create(name="Haircare", defaults={'slug': 'haircare', 'parent': cat_beauty})
 
-    sneakers = Product.objects.create(category=footwear_cat, name="Urban Explorer Sneakers", slug="urban-explorer-sneakers", description="Versatile and comfortable unisex sneakers.")
-    sneakers.tags.add(unisex_tag)
-    ProductImage.objects.create(product=sneakers, image='product_images/sneakers_side.jpg', alt_text="Side view of the Urban Explorer Sneakers")
-    ProductImage.objects.create(product=sneakers, image='product_images/sneakers_top.jpg', alt_text="Top-down view of the Urban Explorer Sneakers")
+    product_definitions = [
+        # == CLOTHING ==
+        {'cat': cat_women_cloth, 'name': 'Thanh Hien 3-Piece Set', 'slug': 'thanh-hien-3-piece-set', 'desc': 'Easy to wear natural fashion set from Vietnam. Includes top, shorts, and over-shirt.', 'tags': [tag_women, tag_new], 'img': 'product_images/placeholder.jpg', 'variants': [(val_s, 817.12), (val_m, 817.12)]},
+        {'cat': cat_women_cloth, 'name': 'Bohemian Floral Maxi Dress', 'slug': 'bohemian-maxi-dress', 'desc': 'A flowing, floral maxi dress perfect for summer days and casual evenings.', 'tags': [tag_women], 'img': 'product_images/placeholder.jpg', 'variants': [(val_s, 1250.00), (val_m, 1250.00), (val_l, 1250.00)]},
+        {'cat': cat_women_cloth, 'name': 'High-Waisted Power Leggings', 'slug': 'power-leggings', 'desc': 'Comfortable and supportive high-waisted leggings for workouts or casual wear.', 'tags': [tag_women, tag_bestseller], 'img': 'product_images/placeholder.jpg', 'variants': [(val_s, 990.00), (val_m, 990.00)]},
+        {'cat': cat_men_cloth, 'name': 'Classic Oxford Shirt', 'slug': 'classic-oxford-shirt', 'desc': 'A timeless and versatile Oxford shirt, essential for any man\'s wardrobe.', 'tags': [tag_men, tag_bestseller], 'img': 'product_images/placeholder.jpg', 'variants': [(val_m, 1100.00), (val_l, 1100.00)]},
+        {'cat': cat_men_cloth, 'name': 'Performance Athletic Shorts', 'slug': 'performance-shorts', 'desc': 'Lightweight, breathable shorts designed for maximum performance.', 'tags': [tag_men], 'img': 'product_images/placeholder.jpg', 'variants': [(val_m, 850.00), (val_l, 850.00)]},
+        {'cat': cat_clothing, 'name': 'Signature Unisex Hoodie', 'slug': 'signature-unisex-hoodie', 'desc': 'An iconic, premium-weight hoodie made from organic cotton. A staple for everyone.', 'tags': [tag_unisex, tag_eco], 'img': 'product_images/placeholder.jpg', 'variants': [(val_s, 1800.00), (val_m, 1800.00), (val_l, 1850.00)]},
+        
+        # == FOOTWEAR ==
+        {'cat': cat_women_shoes, 'name': 'Autumn Casual Board Shoes', 'slug': 'autumn-board-shoes', 'desc': 'Unisex-style, breathable board shoes inspired by 2025 Wenzhou designs.', 'tags': [tag_women, tag_new], 'img': 'product_images/placeholder.jpg', 'variants': [(val_ss_38, 830.74), (val_ss_39, 830.74)]},
+        {'cat': cat_men_shoes, 'name': 'Urban Explorer Sneakers', 'slug': 'urban-sneakers', 'desc': 'Versatile and comfortable unisex sneakers, sourced from Wenzhou King-Footwear.', 'tags': [tag_men, tag_bestseller], 'img': 'product_images/placeholder.jpg', 'variants': [(val_ss_41, 770.00), (val_ss_42, 770.00)]},
+        {'cat': cat_women_shoes, 'name': 'Elegant Heeled Sandals', 'slug': 'heeled-sandals', 'desc': 'A pair of elegant sandals with a comfortable block heel, perfect for events.', 'tags': [tag_women], 'img': 'product_images/placeholder.jpg', 'variants': [(val_ss_38, 1400.00), (val_ss_39, 1400.00)]},
+        {'cat': cat_men_shoes, 'name': 'Handcrafted Leather Boots', 'slug': 'leather-boots', 'desc': 'Durable, handcrafted leather boots that combine style and ruggedness.', 'tags': [tag_men], 'img': 'product_images/placeholder.jpg', 'variants': [(val_ss_41, 2800.00), (val_ss_42, 2800.00)]},
+        {'cat': cat_women_shoes, 'name': 'Comfort Slip-On Flats', 'slug': 'slip-on-flats', 'desc': 'The perfect everyday shoe, combining style with all-day comfort.', 'tags': [tag_women], 'img': 'product_images/placeholder.jpg', 'variants': [(val_ss_38, 950.00), (val_ss_39, 950.00)]},
+        {'cat': cat_men_shoes, 'name': 'Suede Driving Loafers', 'slug': 'driving-loafers', 'desc': 'Sophisticated suede loafers for a smart-casual look.', 'tags': [tag_men], 'img': 'product_images/placeholder.jpg', 'variants': [(val_ss_41, 2100.00), (val_ss_42, 2100.00)]},
+        # == BEAUTY PRODUCTS ==
+        {'cat': cat_skincare, 'name': 'Rejuvenating Vitamin C Serum', 'slug': 'vitamin-c-serum', 'desc': 'Brightens and revitalizes skin with a potent blend of antioxidants.', 'tags': [tag_unisex, tag_bestseller], 'img': 'product_images/placeholder.jpg', 'variants': [(val_v_50, 1200.00), (val_v_100, 2000.00)]},
+        {'cat': cat_skincare, 'name': 'Hydrating Aloe Vera Gel', 'slug': 'aloe-vera-gel', 'desc': 'Soothes and hydrates skin with pure aloe vera extract.', 'tags': [tag_unisex], 'img': 'product_images/placeholder.jpg', 'variants': [(val_v_100, 800.00)]},
+        {'cat': cat_skincare, 'name': 'Organic Green Tea Face Mask', 'slug': 'green-tea-mask', 'desc': 'Detoxifying face mask enriched with organic green tea.', 'tags': [tag_unisex, tag_eco], 'img': 'product_images/placeholder.jpg', 'variants': [(val_v_50, 950.00)]},
+        {'cat': cat_skincare, 'name': 'Revitalizing Eye Cream', 'slug': 'eye-cream', 'desc': 'Reduces dark circles and puffiness for a refreshed look.', 'tags': [tag_unisex], 'img': 'product_images/placeholder.jpg', 'variants': [(val_v_250, 1500.00)]},
+        {'cat': cat_haircare, 'name': 'Nourishing Argan Oil Shampoo', 'slug': 'argan-oil-shampoo', 'desc': 'Infused with argan oil to nourish and strengthen hair.', 'tags': [tag_unisex], 'img': 'product_images/placeholder.jpg', 'variants': [(val_v_250, 1100.00)]},
+        {'cat': cat_haircare, 'name': 'Moisturizing Coconut Conditioner', 'slug': 'coconut-conditioner', 'desc': 'Deeply hydrates and detangles hair with coconut extract.', 'tags': [tag_unisex], 'img': 'product_images/placeholder.jpg', 'variants': [(val_v_250, 950.00)]},
+        {'cat': cat_haircare, 'name': 'Revitalizing Hair Growth Serum', 'slug': 'hair-growth-serum', 'desc': 'Stimulates hair growth with a blend of natural oils.', 'tags': [tag_unisex, tag_bestseller], 'img': 'product_images/placeholder.jpg', 'variants': [(val_v_50, 1500.00)]},
+        {'cat': cat_skincare, 'name': 'Synogal 7-Color LED Therapy Mask', 'slug': 'synogal-led-mask', 'desc': 'A home-use phototherapy mask for skin whitening and rejuvenation from Guangzhou.', 'tags': [tag_unisex, tag_new], 'img': 'product_images/placeholder.jpg', 'variants': [(None, 3268.45)]},
+        {'cat': cat_skincare, 'name': 'Hydrating Hyaluronic Acid Serum', 'slug': 'hydrating-serum', 'desc': 'A powerful serum to lock in moisture for a youthful glow. For all skin types.', 'tags': [tag_unisex, tag_bestseller], 'img': 'product_images/placeholder.jpg', 'variants': [(val_v_50, 1100.00), (val_v_100, 1900.00)]},
+        {'cat': cat_skincare, 'name': "Men's Revitalizing Face Wash", 'slug': 'men-face-wash', 'desc': 'A daily cleanser designed to remove grime and energize men\'s skin.', 'tags': [tag_men], 'img': 'product_images/placeholder.jpg', 'variants': [(val_v_100, 950.00)]},
+        {'cat': cat_haircare, 'name': 'Argan Oil Repairing Hair Mask', 'slug': 'argan-hair-mask', 'desc': 'Deeply conditions and restores shine to dry or damaged hair.', 'tags': [tag_women], 'img': 'product_images/placeholder.jpg', 'variants': [(val_v_250, 1300.00)]},
+        {'cat': cat_haircare, 'name': "Men's Firm Hold Styling Pomade", 'slug': 'men-pomade', 'desc': 'For a sharp, classic look with a strong hold and matte finish.', 'tags': [tag_men], 'img': 'product_images/placeholder.jpg', 'variants': [(val_v_100, 850.00)]},
+        {'cat': cat_haircare, 'name': 'Tea Tree Scalp Treatment Shampoo', 'slug': 'tea-tree-shampoo', 'desc': 'A clarifying shampoo that soothes the scalp and removes buildup. For all.', 'tags': [tag_unisex, tag_eco], 'img': 'product_images/placeholder.jpg', 'variants': [(val_v_250, 1050.00)]},
+    ]
 
-    sneakers_41 = ProductVariant.objects.create(product=sneakers, price=3500.00, stock_quantity=25)
-    sneakers_41.attributes.add(attr_41)
-    sneakers_42 = ProductVariant.objects.create(product=sneakers, price=3500.00, stock_quantity=22)
-    sneakers_42.attributes.add(attr_42)
-    sneakers_43 = ProductVariant.objects.create(product=sneakers, price=3500.00, stock_quantity=18)
-    sneakers_43.attributes.add(attr_43)
-    print(f"Created Product: {sneakers.name}")
+    print("Creating Products and Variants...")
+    for p_data in product_definitions:
+        product, created = Product.objects.get_or_create(
+            slug=p_data['slug'],
+            defaults={
+                'category': p_data['cat'],
+                'name': p_data['name'],
+                'description': p_data['desc'],
+            }
+        )
+        if created:
+            print(f"  - Created Product: {product.name}")
+            product.tags.set(p_data['tags'])
+            ProductImage.objects.create(product=product, image=p_data['img'], alt_text=f"Image of {product.name}")
 
-    mens_perfume = Product.objects.create(category=perfume_cat, name="Noir Enigma", slug="noir-enigma-perfume", description="A bold and mysterious scent for the modern man. Notes of spice and wood.")
-    mens_perfume.tags.add(mens_tag, new_arrival_tag)
-    ProductImage.objects.create(product=mens_perfume, image='product_images/mens_perfume_bottle.jpg', alt_text="Noir Enigma perfume bottle")
-    ProductImage.objects.create(product=mens_perfume, image='product_images/mens_perfume_box.jpg', alt_text="Noir Enigma perfume packaging")
-    perfume_50 = ProductVariant.objects.create(product=mens_perfume, price=4500.00, stock_quantity=40)
-    perfume_50.attributes.add(attr_50ml)
-    perfume_100 = ProductVariant.objects.create(product=mens_perfume, price=6200.00, stock_quantity=25)
-    perfume_100.attributes.add(attr_100ml)
-    print(f"Created Product: {mens_perfume.name}")
-
-    womens_perfume = Product.objects.create(category=perfume_cat, name="Velvet Bloom", slug="velvet-bloom-perfume", description="An elegant and floral fragrance for women. Delicate notes of jasmine and rose.")
-    womens_perfume.tags.add(womens_tag)
-    ProductImage.objects.create(product=womens_perfume, image='product_images/womens_perfume_bottle.jpg', alt_text="Velvet Bloom perfume bottle")
-    w_perfume_50 = ProductVariant.objects.create(product=womens_perfume, price=4800.00, stock_quantity=50)
-    w_perfume_50.attributes.add(attr_50ml)
-    w_perfume_100 = ProductVariant.objects.create(product=womens_perfume, price=6500.00, stock_quantity=30)
-    w_perfume_100.attributes.add(attr_100ml)
-    print(f"Created Product: {womens_perfume.name}")
-
-    face_serum = Product.objects.create(category=skincare_cat, name="Revitalizing Face Serum", slug="revitalizing-face-serum", description="A hydrating and brightening serum for all skin types. Packed with Vitamin C.")
-    face_serum.tags.add(unisex_tag)
-    ProductImage.objects.create(product=face_serum, image='product_images/serum_bottle.jpg', alt_text="Revitalizing Face Serum bottle")
-    ProductImage.objects.create(product=face_serum, image='product_images/serum_texture.jpg', alt_text="Texture of the Revitalizing Face Serum")
-    ProductVariant.objects.create(product=face_serum, price=2800.00, stock_quantity=60)
-    print(f"Created Product: {face_serum.name}")
-
-    hair_oil = Product.objects.create(category=haircare_cat, name="Nourishing Hair Oil", slug="nourishing-hair-oil", description="A blend of natural oils to strengthen and add shine to your hair.")
-    hair_oil.tags.add(unisex_tag)
-    ProductImage.objects.create(product=hair_oil, image='product_images/hair_oil_bottle.jpg', alt_text="Nourishing Hair Oil bottle")
-    ProductVariant.objects.create(product=hair_oil, price=1800.00, stock_quantity=75)
-    print(f"Created Product: {hair_oil.name}")
+            for attr_val, price in p_data['variants']:
+                variant = ProductVariant.objects.create(product=product, price=price, stock_quantity=random.randint(5, 50))
+                if attr_val:
+                    variant.attributes.add(attr_val)
+                print(f"    - Created Variant: {variant}")
 
     print("\nSeeding complete!")
 
 if __name__ == '__main__':
-    clear_data()
     seed_data()

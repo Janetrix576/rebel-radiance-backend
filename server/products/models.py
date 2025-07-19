@@ -1,3 +1,4 @@
+
 from django.db import models
 import uuid
 
@@ -11,7 +12,12 @@ class Category(models.Model):
         ordering = ['name']
 
     def __str__(self):
-        return self.name
+        full_path = [self.name]
+        k = self.parent
+        while k is not None:
+            full_path.append(k.name)
+            k = k.parent
+        return ' > '.join(full_path[::-1])
 
 class Tag(models.Model):
     name = models.CharField(max_length=100, unique=True)
@@ -39,7 +45,7 @@ class AttributeValue(models.Model):
 class Product(models.Model):
     category = models.ForeignKey(Category, related_name='products', on_delete=models.SET_NULL, null=True)
     name = models.CharField(max_length=255)
-    slug = models.SlugField(unique=True)
+    slug = models.SlugField(unique=True, help_text="A unique URL-friendly identifier for the product.")
     description = models.TextField(help_text="A compelling description of the product.")
     tags = models.ManyToManyField(Tag, blank=True)
     
@@ -57,7 +63,7 @@ class ProductVariant(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     product = models.ForeignKey(Product, related_name='variants', on_delete=models.CASCADE)
     attributes = models.ManyToManyField(AttributeValue)
-    sku = models.CharField(max_length=100, unique=True, blank=True, null=True, help_text="Stock Keeping Unit")
+    sku = models.CharField(max_length=100, unique=True, blank=True, null=True, help_text="Optional Stock Keeping Unit")
     price = models.DecimalField(max_digits=10, decimal_places=2, help_text="Price in KES")
     stock_quantity = models.PositiveIntegerField(default=10, help_text="Available stock for this variant.")
     is_active = models.BooleanField(default=True)
@@ -68,7 +74,7 @@ class ProductVariant(models.Model):
 
 class ProductImage(models.Model):
     product = models.ForeignKey(Product, related_name='images', on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='product_images/')
+    image = models.ImageField(upload_to='product_images/', help_text="Upload a product image.")
     alt_text = models.CharField(max_length=255, blank=True, help_text="A short description of the image for accessibility.")
 
     def __str__(self):
