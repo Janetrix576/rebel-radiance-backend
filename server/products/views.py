@@ -1,19 +1,13 @@
 from rest_framework import viewsets, permissions
 from .models import Product, Category, Tag
 from .serializers import (
-    ProductListSerializer, 
-    ProductDetailSerializer, 
-    CategorySerializer, 
+    ProductListSerializer,
+    ProductDetailSerializer,
+    CategorySerializer,
     TagSerializer
 )
 
 class ProductViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Product.objects.filter(is_active=True).prefetch_related(
-        'category', 
-        'tags', 
-        'variants__attributes__attribute', 
-        'images'
-    )
     permission_classes = [permissions.AllowAny]
     lookup_field = 'slug'
 
@@ -21,6 +15,18 @@ class ProductViewSet(viewsets.ReadOnlyModelViewSet):
         if self.action == 'list':
             return ProductListSerializer
         return ProductDetailSerializer
+
+    def get_queryset(self):
+        queryset = Product.objects.filter(is_active=True).prefetch_related(
+            'category',
+            'tags',
+            'variants__attributes__attribute',
+            'images'
+        )
+        category_slug = self.request.query_params.get('category')
+        if category_slug:
+            queryset = queryset.filter(category__slug=category_slug)
+        return queryset
 
 class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Category.objects.all()

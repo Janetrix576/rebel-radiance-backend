@@ -1,6 +1,7 @@
 import os
 import django
 import random
+
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'beautyshop.settings')
 django.setup()
 
@@ -15,93 +16,73 @@ def clear_data():
     print("Old data has been cleared.")
 
 def seed_data():
-    print("Seeding new data...")
+    print("Seeding new beauty products...")
 
-    print("Creating Tags...")
     tag_new, _ = Tag.objects.get_or_create(name="New Arrival")
     tag_unisex, _ = Tag.objects.get_or_create(name="Unisex")
     tag_men, _ = Tag.objects.get_or_create(name="For Men")
     tag_women, _ = Tag.objects.get_or_create(name="For Women")
     tag_bestseller, _ = Tag.objects.get_or_create(name="Bestseller")
     tag_eco, _ = Tag.objects.get_or_create(name="Eco-Friendly")
-
-    print("Creating Attributes...")
-    attr_size, _ = Attribute.objects.get_or_create(name="Size")
-    val_s, _ = AttributeValue.objects.get_or_create(attribute=attr_size, value="S")
-    val_m, _ = AttributeValue.objects.get_or_create(attribute=attr_size, value="M")
-    val_l, _ = AttributeValue.objects.get_or_create(attribute=attr_size, value="L")
-
-    attr_shoe_size, _ = Attribute.objects.get_or_create(name="Shoe Size (EU)")
-    val_ss_36, _ = AttributeValue.objects.get_or_create(attribute=attr_shoe_size, value="36")
-    val_ss_37, _ = AttributeValue.objects.get_or_create(attribute=attr_shoe_size, value="37")
-    val_ss_38, _ = AttributeValue.objects.get_or_create(attribute=attr_shoe_size, value="38")
-    val_ss_39, _ = AttributeValue.objects.get_or_create(attribute=attr_shoe_size, value="39")
-    val_ss_41, _ = AttributeValue.objects.get_or_create(attribute=attr_shoe_size, value="41")
-    val_ss_42, _ = AttributeValue.objects.get_or_create(attribute=attr_shoe_size, value="42")
+    tag_vegan, _ = Tag.objects.get_or_create(name="Vegan")
 
     attr_volume, _ = Attribute.objects.get_or_create(name="Volume")
+    val_v_30, _ = AttributeValue.objects.get_or_create(attribute=attr_volume, value="30ml")
     val_v_50, _ = AttributeValue.objects.get_or_create(attribute=attr_volume, value="50ml")
     val_v_100, _ = AttributeValue.objects.get_or_create(attribute=attr_volume, value="100ml")
+    val_v_150, _ = AttributeValue.objects.get_or_create(attribute=attr_volume, value="150ml")
     val_v_250, _ = AttributeValue.objects.get_or_create(attribute=attr_volume, value="250ml")
-    val_v_500, _ = AttributeValue.objects.get_or_create(attribute=attr_volume, value="500ml")
-    val_v_1000, _ = AttributeValue.objects.get_or_create(attribute=attr_volume, value="1000ml")
 
-    print("Creating Categories...")
-    cat_clothing, _ = Category.objects.get_or_create(name="Clothing", defaults={'slug': 'clothing'})
-    cat_footwear, _ = Category.objects.get_or_create(name="Footwear", defaults={'slug': 'footwear'})
-    cat_beauty, _ = Category.objects.get_or_create(name="Beauty Products", defaults={'slug': 'beauty'})
-    cat_men_cloth, _ = Category.objects.get_or_create(name="Men's Clothing", defaults={'slug': 'men-clothing', 'parent': cat_clothing})
-    cat_women_cloth, _ = Category.objects.get_or_create(name="Women's Clothing", defaults={'slug': 'women-clothing', 'parent': cat_clothing})
-    cat_men_shoes, _ = Category.objects.get_or_create(name="Men's Shoes", defaults={'slug': 'men-shoes', 'parent': cat_footwear})
-    cat_women_shoes, _ = Category.objects.get_or_create(name="Women's Shoes", defaults={'slug': 'women-shoes', 'parent': cat_footwear})
+    attr_scent, _ = Attribute.objects.get_or_create(name="Scent Profile")
+    val_s_woody, _ = AttributeValue.objects.get_or_create(attribute=attr_scent, value="Woody & Spicy")
+    val_s_floral, _ = AttributeValue.objects.get_or_create(attribute=attr_scent, value="Floral & Sweet")
+    val_s_fresh, _ = AttributeValue.objects.get_or_create(attribute=attr_scent, value="Fresh & Citrus")
+
+    cat_beauty, _ = Category.objects.get_or_create(name="Beauty", defaults={'slug': 'beauty'})
     cat_skincare, _ = Category.objects.get_or_create(name="Skincare", defaults={'slug': 'skincare', 'parent': cat_beauty})
     cat_haircare, _ = Category.objects.get_or_create(name="Haircare", defaults={'slug': 'haircare', 'parent': cat_beauty})
-    
-    # CLOTHING
+    cat_fragrance, _ = Category.objects.get_or_create(name="Fragrance", defaults={'slug': 'fragrance', 'parent': cat_beauty})
+    cat_grooming, _ = Category.objects.get_or_create(name="Grooming", defaults={'slug': 'grooming', 'parent': cat_beauty})
+
     product_definitions = [
-        {'cat': cat_women_cloth, 'name': 'Thanh Hien 3-Piece Set', 'slug': 'thanh-hien-3-piece-set', 'desc': 'Easy to wear natural fashion set from Vietnam. Includes top, shorts, and over-shirt.', 'tags': [tag_women, tag_new], 'img': 'https://i.pinimg.com/1200x/bc/62/ec/bc62ec18c79b3fb961457fe9b4258f1e.jpg', 'variants': [(val_s, 817.12), (val_m, 817.12)]},
-        {'cat': cat_women_cloth, 'name': 'Bohemian Floral Maxi Dress', 'slug': 'bohemian-maxi-dress', 'desc': 'A flowing, floral maxi dress perfect for summer days and casual evenings.', 'tags': [tag_women], 'img': 'https://i.pinimg.com/1200x/bd/cd/cf/bdcdcf6c22fa40a4fb836fc6154f81cf.jpg', 'variants': [(val_s, 1250.00), (val_m, 1250.00), (val_l, 1250.00)]},
-        {'cat': cat_women_cloth, 'name': 'High-Waisted Power Leggings', 'slug': 'power-leggings', 'desc': 'Comfortable and supportive high-waisted leggings for workouts or casual wear.', 'tags': [tag_women, tag_bestseller], 'img': 'https://i.pinimg.com/1200x/fd/47/8a/fd478a9b6b4aee135be44666b93c21b9.jpg', 'variants': [(val_s, 990.00), (val_m, 990.00)]},
-        {'cat': cat_women_cloth, 'name': 'Elegant Silk Blouse', 'slug': 'elegant-silk-blouse', 'desc': 'A luxurious and versatile silk blouse that transitions effortlessly from office to evening wear.', 'tags': [tag_women], 'img': 'https://i.pinimg.com/1200x/36/01/d7/3601d70cc150a8a28fb75868bac7c79d.jpg', 'variants': [(val_s, 1500.00), (val_m, 1500.00), (val_l, 1500.00)]},
-        {'cat': cat_women_cloth, 'name': 'Chic Tailored Blazer', 'slug': 'chic-tailored-blazer', 'desc': 'A sharply tailored blazer that adds a touch of sophistication to any outfit.', 'tags': [tag_women], 'img': 'https://i.pinimg.com/1200x/11/5b/c4/115bc4ffaeed39a16f1cdfac4a2324ac.jpg', 'variants': [(val_s, 2200.00), (val_m, 2200.00)]},
-        {'cat': cat_men_cloth, 'name': 'Classic Oxford Shirt', 'slug': 'classic-oxford-shirt', 'desc': 'A timeless and versatile Oxford shirt, essential for any man\'s wardrobe. Made with 100% cotton.', 'tags': [tag_men, tag_bestseller], 'img': 'https://i.pinimg.com/736x/d1/9e/89/d19e89cfe9adfd2e0796f95501bb2737.jpg', 'variants': [(val_m, 1100.00), (val_l, 1100.00)]},
-        {'cat': cat_men_cloth, 'name': 'Performance Athletic Shorts', 'slug': 'performance-shorts', 'desc': 'Lightweight, breathable shorts with sweat-wicking technology, designed for maximum performance.', 'tags': [tag_men], 'img': 'https://i.pinimg.com/1200x/6e/bf/3b/6ebf3b69dfd7be4cf1b5dbbfca22fa4b.jpg', 'variants': [(val_m, 850.00), (val_l, 850.00)]},
-        {'cat': cat_men_cloth, 'name': 'Modern Slim-Fit Chinos', 'slug': 'modern-slim-fit-chinos', 'desc': 'Versatile slim-fit chinos crafted with a hint of stretch for all-day comfort and style.', 'tags': [tag_men], 'img': 'https://i.pinimg.com/1200x/d3/a6/ba/d3a6ba0740c7e03ee3e6731be39f74b3.jpg', 'variants': [(val_m, 1400.00), (val_l, 1400.00)]},
-        {'cat': cat_men_cloth, 'name': 'Essential Pique Polo Shirt', 'slug': 'essential-pique-polo', 'desc': 'A classic pique polo shirt that offers a smart-casual look for any occasion.', 'tags': [tag_men], 'img': 'https://i.pinimg.com/736x/5b/ef/c0/5befc07df0c685f7b5c1b67bec96ffa1.jpg', 'variants': [(val_s, 950.00), (val_m, 950.00), (val_l, 950.00)]},
-        {'cat': cat_men_cloth, 'name': 'Lightweight Bomber Jacket', 'slug': 'lightweight-bomber-jacket', 'desc': 'A stylish and lightweight bomber jacket, perfect for layering during transitional weather.', 'tags': [tag_men, tag_new], 'img': 'https://i.pinimg.com/736x/ef/fc/d3/effcd3359a2e04f3a8f3d48b11d5fdda.jpg', 'variants': [(val_m, 2500.00), (val_l, 2500.00)]},
-        {'cat': cat_clothing, 'name': 'Signature Unisex Hoodie', 'slug': 'signature-unisex-hoodie', 'desc': 'An iconic, premium-weight hoodie made from organic cotton. A staple for everyone.', 'tags': [tag_unisex, tag_eco, tag_bestseller], 'img': 'https://i.pinimg.com/1200x/22/c6/fb/22c6fb0eccc73ea7ed246b345042c33d.jpg', 'variants': [(val_s, 1800.00), (val_m, 1800.00), (val_l, 1850.00)]},
-        {'cat': cat_clothing, 'name': 'Classic Crewneck T-Shirt', 'slug': 'classic-crewneck-tshirt', 'desc': 'The perfect everyday essential. A soft, durable crewneck t-shirt available in multiple colors.', 'tags': [tag_unisex], 'img': 'https://i.pinimg.com/1200x/0f/1b/f8/0f1bf87820aa11601d18875ecbf244ef.jpg', 'variants': [(val_s, 750.00), (val_m, 750.00), (val_l, 750.00)]},
-        {'cat': cat_clothing, 'name': 'Vintage Denim Jacket', 'slug': 'vintage-denim-jacket', 'desc': 'A timeless denim jacket with a classic vintage wash that gets better with every wear.', 'tags': [tag_unisex, tag_new], 'img': 'https://i.pinimg.com/736x/5e/36/09/5e3609e33ecf087c130aeda6a55640c7.jpg', 'variants': [(val_s, 2800.00), (val_m, 2800.00), (val_l, 2800.00)]},
-        {'cat': cat_clothing, 'name': 'Comfort-First Jogger Pants', 'slug': 'comfort-jogger-pants', 'desc': 'Ultra-soft fleece jogger pants with a relaxed fit, perfect for lounging or casual outings.', 'tags': [tag_unisex], 'img': 'https://i.pinimg.com/1200x/0c/45/9d/0c459d3e9e2a51c33888edbfd5455e50.jpg', 'variants': [(val_s, 1600.00), (val_m, 1600.00)]},
-        {'cat': cat_clothing, 'name': 'Fisherman Beanie Hat', 'slug': 'fisherman-beanie-hat', 'desc': 'A soft, ribbed-knit beanie hat for a stylish and cozy finishing touch to any look.', 'tags': [tag_unisex], 'img': 'https://i.pinimg.com/1200x/11/13/9c/11139c2b45867e8223724a40cee6f6fd.jpg', 'variants': [(None, 650.00)]},
-    
-        # == FOOTWEAR ==
-        {'cat': cat_women_shoes, 'name': 'Autumn Casual Board Shoes', 'slug': 'autumn-board-shoes', 'desc': 'Unisex-style, breathable board shoes inspired by 2025 Wenzhou designs.', 'tags': [tag_women, tag_new], 'img': 'https://i.pinimg.com/1200x/da/2b/86/da2b86ca749f7cd3c3d09baf7b0067fc.jpg', 'variants': [(val_ss_38, 830.74), (val_ss_39, 830.74)]},
-        {'cat': cat_women_shoes, 'name': 'Elegant Heeled Sandals', 'slug': 'heeled-sandals', 'desc': 'A pair of elegant sandals with a comfortable block heel, perfect for formal events and evening outings.', 'tags': [tag_women], 'img': 'https://i.pinimg.com/1200x/d9/31/cf/d931cfec0d61f5c63882b515ca71407a.jpg', 'variants': [(val_ss_38, 1400.00), (val_ss_39, 1400.00)]},
-        {'cat': cat_women_shoes, 'name': 'Comfort Slip-On Flats', 'slug': 'slip-on-flats', 'desc': 'The perfect everyday shoe, combining chic style with all-day comfort. Easy to wear and versatile.', 'tags': [tag_women, tag_bestseller], 'img': 'https://i.pinimg.com/736x/de/a4/3b/dea43be9df9fb8a80b552a8c07f2a8db.jpg', 'variants': [(val_ss_38, 950.00), (val_ss_39, 950.00)]},
-        {'cat': cat_women_shoes, 'name': 'Classic White Canvas Sneakers', 'slug': 'women-white-canvas-sneakers', 'desc': 'A timeless wardrobe staple. These canvas sneakers offer a clean, crisp look that pairs with anything.', 'tags': [tag_women], 'img': 'https://i.pinimg.com/1200x/f3/a5/7c/f3a57cda5b4675ac6b1364e34244a349.jpg', 'variants': [(val_ss_38, 1100.00), (val_ss_39, 1100.00), (val_ss_37, 1100.00)]},
-        {'cat': cat_women_shoes, 'name': 'Chic Ankle Boots', 'slug': 'chic-ankle-boots', 'desc': 'Stylish and versatile ankle boots with a low heel, perfect for adding an edge to any outfit.', 'tags': [tag_women, tag_new], 'img': 'https://i.pinimg.com/736x/7b/e4/9c/7be49cc38c756772093e084be2b2f7f8.jpg', 'variants': [(val_ss_38, 2500.00), (val_ss_39, 2500.00)]},
-        {'cat': cat_men_shoes, 'name': 'Urban Explorer Sneakers', 'slug': 'urban-sneakers', 'desc': 'Versatile and comfortable unisex sneakers, sourced from Wenzhou King-Footwear.', 'tags': [tag_men, tag_bestseller], 'img': 'https://i.pinimg.com/1200x/0d/aa/e9/0daae9d9134677506296ff4bcaa89fd5.jpg', 'variants': [(val_ss_41, 770.00), (val_ss_42, 770.00)]},
-        {'cat': cat_men_shoes, 'name': 'Handcrafted Leather Boots', 'slug': 'leather-boots', 'desc': 'Durable, handcrafted leather boots that combine timeless style with rugged, all-weather functionality.', 'tags': [tag_men], 'img': 'https://i.pinimg.com/1200x/f2/b8/ae/f2b8aebdddfd18da1f1fd625c848d3bd.jpg', 'variants': [(val_ss_41, 2800.00), (val_ss_42, 2800.00)]},
-        {'cat': cat_men_shoes, 'name': 'Suede Driving Loafers', 'slug': 'driving-loafers', 'desc': 'Sophisticated suede loafers designed for a smart-casual look and ultimate driving comfort.', 'tags': [tag_men], 'img': 'https://i.pinimg.com/736x/f3/81/11/f3811147f4eafa86aa089b52f0c49b08.jpg', 'variants': [(val_ss_41, 2100.00), (val_ss_42, 2100.00)]},
-        {'cat': cat_men_shoes, 'name': 'Classic Leather Oxford Shoes', 'slug': 'classic-oxford-shoes', 'desc': 'The quintessential dress shoe. Perfect for formal occasions, business meetings, and professional events.', 'tags': [tag_men], 'img': 'https://i.pinimg.com/1200x/7b/58/ef/7b58efdb0579820d7c3651831e429bd5.jpg', 'variants': [(val_ss_41, 3200.00), (val_ss_42, 3200.00)]},
-        {'cat': cat_men_shoes, 'name': 'Casual Canvas Espadrilles', 'slug': 'canvas-espadrilles', 'desc': 'Lightweight and breathable canvas espadrilles, the perfect footwear for summer and beach holidays.', 'tags': [tag_men, tag_new], 'img': 'https://i.pinimg.com/1200x/2b/16/7f/2b167ffc710591055f183a96cc6bf0ff.jpg', 'variants': [(val_ss_41, 1200.00), (val_ss_42, 1200.00)]},
-        # == BEAUTY PRODUCTS ==
-        {'cat': cat_skincare, 'name': 'Rejuvenating Vitamin C Serum', 'slug': 'vitamin-c-serum', 'desc': 'Brightens and revitalizes skin with a potent blend of antioxidants.', 'tags': [tag_unisex, tag_bestseller], 'img': 'https://i.pinimg.com/1200x/74/eb/1d/74eb1d724817aa18805654c59f4d0999.jpg', 'variants': [(val_v_50, 1200.00), (val_v_100, 2000.00)]},
-        {'cat': cat_skincare, 'name': 'Hydrating Aloe Vera Gel', 'slug': 'aloe-vera-gel', 'desc': 'Soothes and hydrates skin with pure aloe vera extract.', 'tags': [tag_unisex], 'img': 'https://i.pinimg.com/1200x/86/65/8f/86658fd5d0884577108df145831e2063.jpg', 'variants': [(val_v_100, 800.00)]},
-        {'cat': cat_skincare, 'name': 'Organic Green Tea Face Mask', 'slug': 'green-tea-mask', 'desc': 'Detoxifying face mask enriched with organic green tea.', 'tags': [tag_unisex, tag_eco], 'img': 'https://i.pinimg.com/736x/31/39/85/3139856f1608437be1bfd4e84a379168.jpg', 'variants': [(val_v_50, 950.00)]},
-        {'cat': cat_skincare, 'name': 'Revitalizing Eye Cream', 'slug': 'eye-cream', 'desc': 'Reduces dark circles and puffiness for a refreshed look.', 'tags': [tag_unisex], 'img': 'https://i.pinimg.com/736x/59/ee/59/59ee596f2dc09ab8acb8befb33d25cf4.jpg', 'variants': [(val_v_250, 1500.00)]},
-        {'cat': cat_haircare, 'name': 'Nourishing Argan Oil Shampoo', 'slug': 'argan-oil-shampoo', 'desc': 'Infused with argan oil to nourish and strengthen hair.', 'tags': [tag_unisex], 'img': 'https://i.pinimg.com/736x/6e/75/ec/6e75ecefeaa6d536374ae939295c721d.jpg', 'variants': [(val_v_250, 1100.00)]},
-        {'cat': cat_haircare, 'name': 'Moisturizing Coconut Conditioner', 'slug': 'coconut-conditioner', 'desc': 'Deeply hydrates and detangles hair with coconut extract.', 'tags': [tag_unisex], 'img': 'https://i.pinimg.com/736x/40/39/00/403900d7fcfc88dc7db4453123916cb9.jpg', 'variants': [(val_v_250, 950.00)]},
-        {'cat': cat_haircare, 'name': 'Revitalizing Hair Growth Serum', 'slug': 'hair-growth-serum', 'desc': 'Stimulates hair growth with a blend of natural oils.', 'tags': [tag_unisex, tag_bestseller], 'img': 'https://i.pinimg.com/736x/68/ab/b6/68abb66cb0e6ab720a151f23be26015e.jpg', 'variants': [(val_v_50, 1500.00)]},
-        {'cat': cat_skincare, 'name': 'Synogal 7-Color LED Therapy Mask', 'slug': 'synogal-led-mask', 'desc': 'A home-use phototherapy mask for skin whitening and rejuvenation from Guangzhou.', 'tags': [tag_unisex, tag_new], 'img': 'https://i.pinimg.com/1200x/ad/62/9b/ad629b81c3fa91e2194e5e6234026fb8.jpg', 'variants': [(None, 3268.45)]},
-        {'cat': cat_skincare, 'name': 'Hydrating Hyaluronic Acid Serum', 'slug': 'hydrating-serum', 'desc': 'A powerful serum to lock in moisture for a youthful glow. For all skin types.', 'tags': [tag_unisex, tag_bestseller], 'img': 'https://i.pinimg.com/1200x/9e/9c/6f/9e9c6f8bf6f4324fda17f6b64d07801d.jpg', 'variants': [(val_v_50, 1100.00), (val_v_100, 1900.00)]},
-        {'cat': cat_skincare, 'name': "Men's Revitalizing Face Wash", 'slug': 'men-face-wash', 'desc': 'A daily cleanser designed to remove grime and energize men\'s skin.', 'tags': [tag_men], 'img': 'https://i.pinimg.com/736x/37/ae/77/37ae7758a52e6ddb9bc8272e28d5e232.jpg', 'variants': [(val_v_100, 950.00)]},
-        {'cat': cat_haircare, 'name': 'Argan Oil Repairing Hair Mask', 'slug': 'argan-hair-mask', 'desc': 'Deeply conditions and restores shine to dry or damaged hair.', 'tags': [tag_women], 'img': 'https://i.pinimg.com/736x/ae/2e/ba/ae2ebaf561b6f3fb0547b149319aa5fe.jpg', 'variants': [(val_v_250, 1300.00)]},
-        {'cat': cat_haircare, 'name': "Men's Firm Hold Styling Pomade", 'slug': 'men-pomade', 'desc': 'For a sharp, classic look with a strong hold and matte finish.', 'tags': [tag_men], 'img': 'https://i.pinimg.com/1200x/0e/35/79/0e357995c9f25432c237b8e567850cd6.jpg', 'variants': [(val_v_100, 850.00)]},
-        {'cat': cat_haircare, 'name': 'Tea Tree Scalp Treatment Shampoo', 'slug': 'tea-tree-shampoo', 'desc': 'A clarifying shampoo that soothes the scalp and removes buildup. For all.', 'tags': [tag_unisex, tag_eco], 'img': 'https://i.pinimg.com/1200x/9a/97/bd/9a97bd061694762616593fd02395b5e3.jpg', 'variants': [(val_v_250, 1050.00)]},
-    
+        {'cat': cat_skincare, 'name': 'Rejuvenating Vitamin C Serum', 'slug': 'vitamin-c-serum', 'desc': 'Brightens and revitalizes skin with a potent blend of antioxidants.', 'tags': [tag_unisex, tag_bestseller], 'img': 'https://i.pinimg.com/736x/c6/4c/b6/c64cb632db7f82cb6d21e423b5fd7455.jpg', 'variants': [(val_v_30, 1200.00), (val_v_50, 1800.00)]},
+        {'cat': cat_skincare, 'name': 'Hydrating Aloe Vera Gel', 'slug': 'aloe-vera-gel', 'desc': 'Soothes and hydrates skin with pure aloe vera extract.', 'tags': [tag_unisex], 'img': 'https://i.pinimg.com/1200x/50/fe/e5/50fee561ec2d261678e7adce6b19903d.jpg', 'variants': [(val_v_100, 800.00)]},
+        {'cat': cat_skincare, 'name': 'Organic Green Tea Face Mask', 'slug': 'green-tea-mask', 'desc': 'Detoxifying face mask enriched with organic green tea.', 'tags': [tag_unisex, tag_eco], 'img': 'https://i.pinimg.com/736x/40/13/fe/4013fe55ae7b6b890fb6005132d40edf.jpg', 'variants': [(val_v_50, 950.00)]},
+        {'cat': cat_skincare, 'name': "Men's Revitalizing Face Wash", 'slug': 'men-face-wash', 'desc': 'A daily cleanser designed to remove grime and energize men\'s skin.', 'tags': [tag_men], 'img': 'https://i.pinimg.com/1200x/a4/b2/1a/a4b21a65219ac0d12e984ff0f42ededc.jpg', 'variants': [(val_v_150, 950.00)]},
+        {'cat': cat_skincare, 'name': 'Gentle Micellar Cleansing Water', 'slug': 'micellar-water', 'desc': 'Removes makeup and impurities without stripping the skin. Suitable for all skin types.', 'tags': [tag_women], 'img': 'https://i.pinimg.com/736x/5e/f2/51/5ef25145f9caec215c447bfb003c2487.jpg', 'variants': [(val_v_250, 1150.00)]},
+        {'cat': cat_skincare, 'name': 'Anti-Aging Retinol Cream', 'slug': 'retinol-cream', 'desc': 'A powerful night cream formulated to reduce the appearance of fine lines and wrinkles.', 'tags': [tag_unisex], 'img': 'https://i.pinimg.com/1200x/bd/7a/3d/bd7a3d14b3c40f060298b2ebb3504a7f.jpg', 'variants': [(val_v_50, 2500.00)]},
+        {'cat': cat_skincare, 'name': 'Clarifying Clay Mask', 'slug': 'clay-mask', 'desc': 'Absorbs excess oil and impurities to leave skin feeling clean and refreshed.', 'tags': [tag_unisex], 'img': 'https://i.pinimg.com/736x/40/3b/5c/403b5c434d102a3dab7018b71c90005a.jpg', 'variants': [(val_v_100, 1300.00)]},
+        {'cat': cat_skincare, 'name': 'Daily Moisturizer with SPF 30', 'slug': 'spf-moisturizer', 'desc': 'A lightweight daily moisturizer that hydrates and protects skin from sun damage.', 'tags': [tag_unisex, tag_bestseller], 'img': 'https://i.pinimg.com/736x/79/e8/9f/79e89f4959df3ac5aae5b6c7f7d10519.jpg', 'variants': [(val_v_50, 1600.00)]},
+        {'cat': cat_skincare, 'name': 'Soothing Rosewater Facial Mist', 'slug': 'rosewater-mist', 'desc': 'A refreshing facial mist to hydrate and tone the skin throughout the day.', 'tags': [tag_women], 'img': 'https://i.pinimg.com/1200x/a1/a1/56/a1a156d5fb510e17acab97b7b547aab6.jpg', 'variants': [(val_v_100, 750.00)]},
+        {'cat': cat_skincare, 'name': 'Synogal 7-Color LED Therapy Mask', 'slug': 'synogal-led-mask', 'desc': 'A home-use phototherapy mask for skin whitening and rejuvenation.', 'tags': [tag_unisex, tag_new], 'img': 'https://i.pinimg.com/1200x/ad/62/9b/ad629b81c3fa91e2194e5e6234026fb8.jpg', 'variants': [(None, 3268.45)]},
+
+        # Haircare
+        {'cat': cat_haircare, 'name': 'Nourishing Argan Oil Shampoo', 'slug': 'argan-oil-shampoo', 'desc': 'Infused with argan oil to nourish and strengthen hair.', 'tags': [tag_unisex], 'img': 'https://i.pinimg.com/1200x/fa/fd/c4/fafdc47e0f805757f07273208551e91a.jpg', 'variants': [(val_v_250, 1100.00)]},
+        {'cat': cat_haircare, 'name': 'Argan Oil Repairing Hair Mask', 'slug': 'argan-hair-mask', 'desc': 'Deeply conditions and restores shine to dry or damaged hair.', 'tags': [tag_women], 'img': 'https://i.pinimg.com/1200x/a9/e0/ab/a9e0ab88c3d09139832f5503976c714a.jpg', 'variants': [(val_v_250, 1300.00)]},
+        {'cat': cat_haircare, 'name': "Men's Firm Hold Styling Pomade", 'slug': 'men-pomade', 'desc': 'For a sharp, classic look with a strong hold and matte finish.', 'tags': [tag_men], 'img': 'https://i.pinimg.com/736x/e1/2e/bc/e12ebc1c8ff4e587abc6b343857f9305.jpg', 'variants': [(val_v_100, 850.00)]},
+        {'cat': cat_haircare, 'name': 'Volumizing Dry Shampoo', 'slug': 'dry-shampoo', 'desc': 'Instantly refreshes hair and adds volume between washes.', 'tags': [tag_unisex], 'img': 'https://i.pinimg.com/736x/23/c0/80/23c080001b2d6773875fcdb1ccb71225.jpg', 'variants': [(val_v_150, 900.00)]},
+        {'cat': cat_haircare, 'name': 'Curl Defining Cream', 'slug': 'curl-cream', 'desc': 'Enhances natural curls, reduces frizz, and adds definition without stiffness.', 'tags': [tag_unisex], 'img': 'https://i.pinimg.com/1200x/51/94/47/519447b3fab7db93b92f3eff2f4c8bdb.jpg', 'variants': [(val_v_150, 1250.00)]},
+        {'cat': cat_haircare, 'name': 'Heat Protectant Spray', 'slug': 'heat-protectant', 'desc': 'Shields hair from heat damage caused by styling tools.', 'tags': [tag_unisex], 'img': 'https://i.pinimg.com/1200x/ba/a2/34/baa23408308095b665daa16d992b163f.jpg', 'variants': [(val_v_100, 980.00)]},
+        {'cat': cat_haircare, 'name': 'Tea Tree Scalp Treatment', 'slug': 'tea-tree-scalp', 'desc': 'A soothing treatment to relieve dry, itchy scalp and reduce dandruff.', 'tags': [tag_unisex, tag_eco], 'img': 'https://i.pinimg.com/1200x/35/c1/32/35c1328cf0e1a1772bc7dce493f75c0a.jpg', 'variants': [(val_v_50, 1400.00)]},
+        {'cat': cat_haircare, 'name': "Men's 2-in-1 Shampoo & Conditioner", 'slug': 'men-2-in-1', 'desc': 'A convenient, effective formula that cleanses and conditions in one step.', 'tags': [tag_men], 'img': 'https://i.pinimg.com/1200x/7e/01/96/7e0196fd95925e560a412ad11e98dc13.jpg', 'variants': [(val_v_250, 1000.00)]},
+
+        # Fragrance
+        {'cat': cat_fragrance, 'name': 'Noir Enigma Eau de Parfum', 'slug': 'noir-enigma-perfume', 'desc': 'A bold and mysterious scent for the modern man.', 'tags': [tag_men, tag_new], 'img': 'https://i.pinimg.com/736x/08/77/d0/0877d0fc1d193f3174dfc05c30d3cdf1.jpg', 'variants': [(val_v_50, 4500.00), (val_v_100, 6200.00)]},
+        {'cat': cat_fragrance, 'name': 'Velvet Bloom Eau de Parfum', 'slug': 'velvet-bloom-perfume', 'desc': 'An elegant and floral fragrance for women.', 'tags': [tag_women, tag_bestseller], 'img': 'https://i.pinimg.com/1200x/10/1e/b2/101eb25484d17040e04d7d6ecc1437d8.jpg', 'variants': [(val_v_50, 4800.00), (val_v_100, 6500.00)]},
+        {'cat': cat_fragrance, 'name': 'Ocean Breeze Eau de Toilette', 'slug': 'ocean-breeze-perfume', 'desc': 'A fresh, aquatic unisex scent that captures the essence of a sea breeze.', 'tags': [tag_unisex], 'img': 'https://i.pinimg.com/736x/ee/4c/20/ee4c20fac4d9635536becb08869dcb83.jpg', 'variants': [(val_v_100, 5500.00)]},
+        {'cat': cat_fragrance, 'name': 'Citrus Grove Cologne', 'slug': 'citrus-cologne', 'desc': 'An uplifting and zesty citrus fragrance, perfect for daytime wear.', 'tags': [tag_unisex, tag_new], 'img': 'https://i.pinimg.com/736x/bb/67/56/bb6756030d39c7d169afd7bcc34705fa.jpg', 'variants': [(val_v_100, 5200.00)]},
+        {'cat': cat_fragrance, 'name': 'Midnight Oud Perfume Oil', 'slug': 'midnight-oud-oil', 'desc': 'A rich, concentrated perfume oil with deep notes of oud and amber.', 'tags': [tag_unisex], 'img': 'https://i.pinimg.com/736x/5a/e9/bb/5ae9bb99bb49a5265ccbbfa40cf2fb42.jpg', 'variants': [(val_v_30, 3800.00)]},
+
+        # Grooming
+        {'cat': cat_grooming, 'name': 'Premium Beard Oil', 'slug': 'premium-beard-oil', 'desc': 'Softens and conditions the beard while moisturizing the skin underneath.', 'tags': [tag_men, tag_bestseller], 'img': 'https://i.pinimg.com/1200x/20/92/cd/2092cd690bba41305b9d144550118490.jpg', 'variants': [(val_v_30, 1500.00)]},
+        {'cat': cat_grooming, 'name': 'Luxury Shaving Cream', 'slug': 'shaving-cream', 'desc': 'A rich, lathering cream for a smooth, comfortable shave.', 'tags': [tag_men], 'img': 'https://i.pinimg.com/736x/e9/14/e5/e914e56bacd474e0a4486ca2f5f079b0.jpg', 'variants': [(val_v_150, 1200.00)]},
+        {'cat': cat_grooming, 'name': 'Aftershave Balm', 'slug': 'aftershave-balm', 'desc': 'A soothing, alcohol-free balm to calm and hydrate skin post-shave.', 'tags': [tag_men], 'img': 'https://i.pinimg.com/736x/9d/71/c6/9d71c6a2259a5ef5f9ecbf191ad74b48.jpg', 'variants': [(val_v_100, 1350.00)]},
+        {'cat': cat_grooming, 'name': 'Exfoliating Body Scrub', 'slug': 'body-scrub', 'desc': 'A refreshing body scrub with natural exfoliants to polish away dead skin cells.', 'tags': [tag_unisex, tag_vegan], 'img': 'https://i.pinimg.com/1200x/c9/ce/7f/c9ce7f33ae214c889150bb65a9cc01dc.jpg', 'variants': [(val_v_250, 1600.00)]},
+        {'cat': cat_grooming, 'name': 'Nourishing Body Lotion', 'slug': 'body-lotion', 'desc': 'A fast-absorbing lotion that provides long-lasting hydration for smooth, soft skin.', 'tags': [tag_unisex], 'img': 'https://i.pinimg.com/1200x/04/a9/bf/04a9bfb2d6bd93b5f5c20273f6071b49.jpg', 'variants': [(val_v_250, 1400.00)]},
+        {'cat': cat_grooming, 'name': 'Charcoal Detox Bar Soap', 'slug': 'charcoal-soap', 'desc': 'A purifying bar soap made with activated charcoal to draw out impurities.', 'tags': [tag_unisex, tag_eco], 'img': 'https://i.pinimg.com/736x/eb/e6/5d/ebe65dbc3cf3407c5ef8cecbdc371216.jpg', 'variants': [(None, 700.00)]},
+        {'cat': cat_grooming, 'name': 'Precision Tweezers', 'slug': 'tweezers', 'desc': 'Professional-grade stainless steel tweezers for precise grooming.', 'tags': [tag_unisex], 'img': 'https://i.pinimg.com/1200x/d6/6c/c5/d66cc5f184cefd1e54263cde7e1962db.jpg', 'variants': [(None, 500.00)]},
     ]
+    
     print("Creating Products and Variants...")
     for p_data in product_definitions:
         product, created = Product.objects.get_or_create(
@@ -117,13 +98,18 @@ def seed_data():
             product.tags.set(p_data['tags'])
             ProductImage.objects.create(product=product, image=p_data['img'], alt_text=f"Image of {product.name}")
 
-            for attr_val, price in p_data['variants']:
-                variant = ProductVariant.objects.create(product=product, price=price, stock_quantity=random.randint(5, 50))
-                if attr_val:
-                    variant.attributes.add(attr_val)
-                print(f"    - Created Variant: {variant}")
+            for variant_data in p_data['variants']:
+                if variant_data:
+                    attr_val, price = variant_data
+                    variant = ProductVariant.objects.create(product=product, price=price, stock_quantity=random.randint(5, 50))
+                    if attr_val:
+                        variant.attributes.add(attr_val)
+                else: 
+                    ProductVariant.objects.create(product=product, price=p_data['variants'][0][1], stock_quantity=random.randint(5, 50))
+
 
     print("\nSeeding complete!")
 
 if __name__ == '__main__':
+    clear_data()
     seed_data()
