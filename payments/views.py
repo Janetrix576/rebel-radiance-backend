@@ -9,24 +9,37 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
 from django.views.decorators.csrf import csrf_exempt
-from django.utils.decorators import method_decorator
-
 from .models import MpesaTransaction
 
-load_dotenv()  # Load .env variables
+load_dotenv()  # Load environment variables from .env
 
+
+# 🔐 Get access token from Safaricom API
 def get_access_token():
     consumer_key = os.getenv("MPESA_CONSUMER_KEY")
     consumer_secret = os.getenv("MPESA_CONSUMER_SECRET")
     auth_url = "https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials"
 
+    print("🧪 Testing MPESA Credentials:")
+    print("Consumer Key:", consumer_key)
+    print("Consumer Secret:", consumer_secret)
+
     response = requests.get(auth_url, auth=(consumer_key, consumer_secret))
-    return response.json().get("access_token")
+
+    print("AUTH STATUS CODE:", response.status_code)
+    print("AUTH RAW TEXT:", response.text)
+
+    try:
+        return response.json().get("access_token")
+    except Exception as e:
+        print("❌ JSON decode error:", str(e))
+        return None
 
 
+# 📲 Initiate STK Push
 @csrf_exempt
 @api_view(["POST"])
-@permission_classes([AllowAny])  # ✅ Allow external/frontend calls
+@permission_classes([AllowAny])
 def stk_push(request):
     access_token = get_access_token()
     if not access_token:
@@ -40,9 +53,18 @@ def stk_push(request):
     timestamp = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
     shortcode = os.getenv("MPESA_SHORTCODE")
     passkey = os.getenv("MPESA_PASSKEY")
+    callback_url = os.getenv("MPESA_CALLBACK_URL")
+
+    print("----- M-PESA ENV DEBUG -----")
+    print("Shortcode:", shortcode)
+    print("Passkey:", passkey[:10] + "...")
+    print("Timestamp:", timestamp)
+    print("Callback URL:", callback_url)
+    print("Access Token:", access_token[:10] + "...")
+    print("----------------------------")
 
     password = base64.b64encode((shortcode + passkey + timestamp).encode()).decode()
-    headers = {"Authorization": f"Bearer {access_token}"}
+
     payload = {
         "BusinessShortCode": shortcode,
         "Password": password,
@@ -52,13 +74,26 @@ def stk_push(request):
         "PartyA": phone,
         "PartyB": shortcode,
         "PhoneNumber": phone,
-        "CallBackURL": os.getenv("MPESA_CALLBACK_URL"),
+        "CallBackURL": callback_url,
         "AccountReference": "RebelRadiance",
         "TransactionDesc": "Payment for order"
     }
 
-    res = requests.post("https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest", json=payload, headers=headers)
-    data = res.json()
+    headers = {"Authorization": f"Bearer {access_token}"}
+    res = requests.post(
+        "https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest",
+        json=payload,
+        headers=headers
+    )
+
+    try:
+        data = res.json()
+    except Exception as e:
+        print("❌ M-Pesa JSON Decode Error:", str(e))
+        print("Raw Response:", res.text)
+        return Response({"error": "Failed to decode Safaricom response."}, status=500)
+
+    print("📡 M-PESA Raw Response:", data)
 
     if res.status_code == 200 and data.get("ResponseCode") == "0":
         MpesaTransaction.objects.create(
@@ -67,24 +102,64 @@ def stk_push(request):
             merchant_request_id=data["MerchantRequestID"],
             checkout_request_id=data["CheckoutRequestID"]
         )
-        return Response({"message": "STK push sent successfully. Check your phone 📲"})
+        return Response({
+            "message": "STK push sent successfully. Check your phone 📲",
+            "checkout_request_id": data["CheckoutRequestID"]
+        })
     else:
         return Response({"error": data}, status=400)
 
 
-@csrf_exempt  # ✅ Exempt from CSRF (callback from Safaricom backend)
+# 📥 M-PESA Callback URL
+@csrf_exempt
 @api_view(["POST"])
-@permission_classes([AllowAny])  # ✅ Open for Safaricom servers
+@permission_classes([AllowAny])
 def mpesa_callback(request):
-    data = request.data.get("Body", {}).get("stkCallback", {})
-    checkout_id = data.get("CheckoutRequestID")
-    result_code = data.get("ResultCode")
-
     try:
-        transaction = MpesaTransaction.objects.get(checkout_request_id=checkout_id)
-        transaction.status = "Success" if result_code == 0 else "Failed"
-        transaction.save()
-    except MpesaTransaction.DoesNotExist:
-        pass  # Optional: log warning
+        print("📩 Raw Callback Body:", request.body.decode())
+        callback_data = request.data or {}
 
-    return Response({"ResultCode": 0, "ResultDesc": "Callback received and processed"})
+        if not callback_data:
+            import json
+            callback_data = json.loads(request.body.decode())
+
+        data = callback_data.get("Body", {}).get("stkCallback", {})
+        print("📦 Parsed Callback Data:", data)
+
+        checkout_id = data.get("CheckoutRequestID")
+        result_code = data.get("ResultCode")
+
+        if not checkout_id:
+            print("❌ Missing CheckoutRequestID in callback")
+            return Response({"error": "Missing checkout ID"}, status=400)
+
+        try:
+            transaction = MpesaTransaction.objects.get(checkout_request_id=checkout_id)
+            transaction.status = "Success" if result_code == 0 else "Failed"
+            transaction.save()
+            print("✅ Transaction updated:", transaction)
+        except MpesaTransaction.DoesNotExist:
+            print(f"❌ Transaction not found for CheckoutRequestID: {checkout_id}")
+            return Response({"error": "Transaction not found"}, status=404)
+
+        return Response({"ResultCode": 0, "ResultDesc": "Callback received and processed"})
+
+    except Exception as e:
+        print("❌ Callback error:", str(e))
+        return Response({"error": "Invalid callback format"}, status=500)
+
+
+# 🧾 Check Payment Status
+@csrf_exempt
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def payment_status(request, checkout_request_id):
+    try:
+        transaction = MpesaTransaction.objects.get(checkout_request_id=checkout_request_id)
+        return Response({
+            "status": transaction.status,
+            "phone_number": transaction.phone_number,
+            "amount": transaction.amount
+        })
+    except MpesaTransaction.DoesNotExist:
+        return Response({"status": "Pending"})

@@ -88,7 +88,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
     # remove the * if this throws error; use exact ngrok URL if needed
-    "https://25f75b090ed7.ngrok-free.ap",
+    "https://fa234c59f688.ngrok-free.app",
 ]
 
 CORS_ALLOW_CREDENTIALS = True
