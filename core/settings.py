@@ -7,15 +7,13 @@ SECRET_KEY = 'django-insecure-yqlds$ksuz&*gz8xska-qk5v81qo$!u5m-+(rq2=ml*fx)#nb^
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '.ngrok-free.app']  # added wildcard for ngrok
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '.ngrok-free.app']  
 
-# ✅ CSRF for frontend and ngrok
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:5173",
     "https://*.ngrok-free.app"
 ]
 
-# ✅ Installed Apps
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -29,10 +27,9 @@ INSTALLED_APPS = [
     'corsheaders',
 ]
 
-# ✅ Middleware (corsheaders must be before CommonMiddleware)
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
-    'django.middleware.common.CommonMiddleware',  # required by corsheaders
+    'django.middleware.common.CommonMiddleware', 
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -84,10 +81,8 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# ✅ CORS SETTINGS
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
-    # remove the * if this throws error; use exact ngrok URL if needed
     "https://fa234c59f688.ngrok-free.app",
 ]
 
