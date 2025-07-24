@@ -1,3 +1,20 @@
+ ft-checkout
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Django migrations
+**/migrations/*.py
+!**/migrations/__init__.py
+
+# SQLite database
+*.sqlite3
+*.db
+
 # Python
 __pycache__/
 *.py[cod]
@@ -20,31 +37,8 @@ local_settings.py
 
 # VSCode
 .vscode/
+dev
 
 # Environment variables
 .env
 
-# OS files
-.DS_Store
-Thumbs.db
-
-# Migrations
-**/migrations/*.pyc
-**/migrations/__pycache__/
-**/migrations/*.py
-
-# Coverage reports
-htmlcov/
-.coverage
-.tox/
-.nox/
-.cache/
-.pytest_cache/
-.coverage.*
-
-# Test output
-junitxml.xml
-
-# Others
-*.swp
-*.swo
