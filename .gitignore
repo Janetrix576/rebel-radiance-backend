@@ -5,61 +5,46 @@ __pycache__/
 *.pyd
 *.pyc
 
-# Byte-compiled
-*.egg
-*.egg-info/
-dist/
-build/
-
 # Virtual environments
 venv/
 ENV/
 env/
 .venv/
 
-# Logs and DB
+# Django
 *.log
 db.sqlite3
-
-# Media/static files
 media/
 staticfiles/
-
-# Local settings
 local_settings.py
+
+# VSCode
+.vscode/
 
 # Environment variables
 .env
-.env.*
-*.pem
-
-# Migrations
-**/migrations/*.pyc
-**/migrations/__pycache__/
-**/migrations/*.py
-!**/migrations/__init__.py
-
-# Test/coverage output
-htmlcov/
-.coverage
-.coverage.*
-coverage.xml
-.tox/
-.nox/
-.cache/
-.pytest_cache/
-junitxml.xml
-*.cover
-
-# Editor settings
-.vscode/
 
 # OS files
 .DS_Store
 Thumbs.db
 
-# Temp files
+# Migrations
+**/migrations/*.pyc
+**/migrations/__pycache__/
+**/migrations/*.py
+
+# Coverage reports
+htmlcov/
+.coverage
+.tox/
+.nox/
+.cache/
+.pytest_cache/
+.coverage.*
+
+# Test output
+junitxml.xml
+
+# Others
 *.swp
 *.swo
-*.bak
-*.tmp
