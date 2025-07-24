@@ -22,13 +22,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest_framework',          # ✅ Corrected casing
-    'corsheaders',             # ✅ Added for frontend-backend connection
-    'orders',                  # ✅ Your app
+    'rest_framework',          
+    'corsheaders',             
+    'orders',                  
 ]
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',   # ✅ Must be first
+    'corsheaders.middleware.CorsMiddleware',   
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
