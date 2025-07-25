@@ -1,3 +1,87 @@
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Django migrations
+**/migrations/*.py
+!**/migrations/__init__.py
+
+# SQLite database
+*.sqlite3
+*.db
+
+# Environment variables
+.env
+
+# Logs
+*.log
+
+# Local development files
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# Python virtual environment
+venv/
+env/
+
+# Pytest cache
+.pytest_cache/
+
+# MyPy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Coverage reports
+htmlcov/
+coverage.xml
+*.cover
+*.py,cover
+.cache
+
+# Unit test / coverage reports
+nosetests.xml
+test_*.xml
+.tox/
+.pytest_cache/
+.junit_cache/
+
+# pip
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Static files
+staticfiles/
+media/
+=======
+ ft-checkout
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Django migrations
+**/migrations/*.py
+!**/migrations/__init__.py
+
+# SQLite database
+*.sqlite3
+*.db
+
 # Python
 __pycache__/
 *.py[cod]
@@ -20,31 +104,9 @@ local_settings.py
 
 # VSCode
 .vscode/
+dev
 
 # Environment variables
 .env
 
-# OS files
-.DS_Store
-Thumbs.db
 
-# Migrations
-**/migrations/*.pyc
-**/migrations/__pycache__/
-**/migrations/*.py
-
-# Coverage reports
-htmlcov/
-.coverage
-.tox/
-.nox/
-.cache/
-.pytest_cache/
-.coverage.*
-
-# Test output
-junitxml.xml
-
-# Others
-*.swp
-*.swo
