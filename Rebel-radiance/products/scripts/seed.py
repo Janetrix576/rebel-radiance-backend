@@ -98,7 +98,7 @@ def run():
 
                     for variant_data in p_data['variants']:
                         price = variant_data[1]
-                        variant = ProductVariant.objects.create(product=product, price=price, stock=random.randint(5, 50))
+                        variant = ProductVariant.objects.create(product=product, price=price, stock_quantity=random.randint(5, 50))
                         
                         attr_val = variant_data[0]
                         if attr_val:
