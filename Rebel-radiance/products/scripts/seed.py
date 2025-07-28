@@ -94,7 +94,7 @@ def run():
                 if created:
                     print(f"  - Created Product: {product.name}")
                     product.tags.set(p_data['tags'])
-                    ProductImage.objects.create(product=product, image_url=p_data['img'], alt_text=f"Image of {product.name}")
+                    ProductImage.objects.create(product=product, image=p_data['img'], alt_text=f"Image of {product.name}")
 
                     for variant_data in p_data['variants']:
                         price = variant_data[1]
