@@ -1,19 +1,112 @@
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Django migrations
+**/migrations/*.py
+!**/migrations/__init__.py
+
+# SQLite database
+*.sqlite3
+*.db
+
 # Environment variables
 .env
 
-# Virtual Environment
-venv/
-
-# Django stuff
+# Logs
 *.log
-*.pot
-*.pyc
-__pycache__/
-local_settings.py
-db.sqlite3
+
+# Local development files
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# Python virtual environment
+venv/
+env/
+
+# Pytest cache
+.pytest_cache/
+
+# MyPy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Coverage reports
+htmlcov/
+coverage.xml
+*.cover
+*.py,cover
+.cache
+
+# Unit test / coverage reports
+nosetests.xml
+test_*.xml
+.tox/
+.pytest_cache/
+.junit_cache/
+
+# pip
+pip-log.txt
+pip-delete-this-directory.txt
 
 # Static files
-static/
-
-# Media files
+staticfiles/
 media/
+=======
+ ft-checkout
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Django migrations
+**/migrations/*.py
+!**/migrations/__init__.py
+
+# SQLite database
+*.sqlite3
+*.db
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+
+# Virtual environments
+venv/
+ENV/
+env/
+.venv/
+
+# Django
+*.log
+db.sqlite3
+media/
+staticfiles/
+local_settings.py
+
+# VSCode
+.vscode/
+dev
+
+# Environment variables
+.env
+
+
