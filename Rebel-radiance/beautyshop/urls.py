@@ -8,15 +8,15 @@ from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 
 schema_view = get_schema_view(
-   openapi.Info(
-      title="Rebel Radiance API",
-      default_version='v1',
-      description="API documentation for the Rebel Radiance e-commerce backend.",
-      contact=openapi.Contact(email="contact@rebelradiance.local"),
-      license=openapi.License(name="MIT License"),
-   ),
-   public=True,
-   permission_classes=[permissions.AllowAny],
+    openapi.Info(
+        title="Rebel Radiance API",
+        default_version='v1',
+        description="API documentation for the Rebel Radiance e-commerce backend.",
+        contact=openapi.Contact(email="contact@rebelradiance.local"),
+        license=openapi.License(name="MIT License"),
+    ),
+    public=True,
+    permission_classes=[permissions.AllowAny],
 )
 
 urlpatterns = [
