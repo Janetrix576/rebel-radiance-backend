@@ -7,14 +7,14 @@ def api_root(request):
     return JsonResponse({
         "message": "Welcome to the Rebel Radiance API",
         "endpoints": {
-            "products": "/api/products/",
-            "categories": "/api/categories/",
-            "tags": "/api/tags/"
+            "products": "/api/products/items/",
+            "categories": "/api/products/categories/",
+            "tags": "/api/products/tags/"
         }
     })
 
 router = DefaultRouter()
-router.register(r'products', ProductViewSet, basename='product')
+router.register(r'items', ProductViewSet, basename='product')
 router.register(r'categories', CategoryViewSet, basename='category')
 router.register(r'tags', TagViewSet, basename='tag')
 
