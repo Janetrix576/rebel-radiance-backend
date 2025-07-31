@@ -1,6 +1,7 @@
 from pathlib import Path
 import os
 from dotenv import load_dotenv
+import dj_database_url 
 
 load_dotenv() 
 
@@ -64,9 +65,12 @@ TEMPLATES = [
 WSGI_APPLICATION = 'beautyshop.wsgi.application'
 
 if 'DATABASE_URL' in os.environ:
-    DATABASES = {
-        'default': dj_database_url.config(conn_max_age=600, ssl_require=True)
-    }
+   DATABASES = {
+    'default': dj_database_url.config(
+        conn_max_age=600,
+        ssl_require=True
+    )
+}
 else:
     DATABASES = {
         'default': {
