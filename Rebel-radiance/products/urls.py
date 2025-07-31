@@ -19,6 +19,6 @@ router.register(r'categories', CategoryViewSet, basename='category')
 router.register(r'tags', TagViewSet, basename='tag')
 
 urlpatterns = [
-    path('api/', include(router.urls)),
+    path('', include(router.urls)),  
     path('', api_root),
 ]
