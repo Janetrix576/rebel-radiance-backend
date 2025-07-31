@@ -129,7 +129,7 @@ class GoogleLoginView(APIView):
             )
             user.save()
 
-        login(request, user)
+        login(request, user, backend='authentication.backends.EmailBackend')
         refresh = RefreshToken.for_user(user)
         return Response({
             'access': str(refresh.access_token),
