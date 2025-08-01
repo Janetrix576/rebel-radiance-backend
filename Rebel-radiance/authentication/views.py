@@ -75,7 +75,7 @@ class GoogleLoginView(APIView):
 
         client_id = os.environ.get('GOOGLE_CLIENT_ID')
         client_secret = os.environ.get('GOOGLE_CLIENT_SECRET')
-        redirect_uri = 'http://localhost:5173'
+        redirect_uri = 'https://rebel-radiance-backend.onrender.com'
 
         if not client_id or not client_secret:
             return Response({'error': 'Google client credentials not configured'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
